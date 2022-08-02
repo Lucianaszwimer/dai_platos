@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "dai",
+    "slug": "dai",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "dai"
+}
