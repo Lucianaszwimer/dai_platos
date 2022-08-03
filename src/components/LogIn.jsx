@@ -15,7 +15,7 @@ export function LogIn() {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-      await postLogIn(user).then(()=> {
+      await axiosLogIn(user).then(()=> {
         navigation.navigate('Home')
       })
       .catch(() => {
@@ -49,7 +49,7 @@ export function LogIn() {
       <Button
         title={'Login'}
         style={styles.input}
-      //onPress={this.onLogin.bind(this)}
+        onPress={validacion}
       />
     </View>
   );

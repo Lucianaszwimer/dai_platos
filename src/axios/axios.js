@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
-export function dbAxios() {
+const axiosClient = axios.create({
+  baseURL: "https://api.spoonacular.com"
+})
+
+export const axiosLogIn = () => {
     const [alumnos, setAlumnos] = useState([])
     useEffect(() => {
       async function getAllAlumnos() {
@@ -16,4 +20,17 @@ export function dbAxios() {
       getAllAlumnos()
     }, [])
     return(alumnos);
+}
+
+return axiosClient.get('/recipes/complexSearch').then(response =>{
+  if(response.status < 300){
+      return response.data
+  }
+  else {
+      console.log("Status > 300")
+  }
+})
+.catch(function(exc) {
+  console.log("Axios error: ", exc)
+})
 }
