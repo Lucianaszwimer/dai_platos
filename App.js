@@ -11,6 +11,7 @@ function LogInScreen() {
   <LogIn/>
   );
 }
+
 export default function App() {
   return (
     <NavigationContainer>

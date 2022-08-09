@@ -1,56 +1,75 @@
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Text } from 'react-native';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
 import { useNavigation } from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { TextInput } from 'react-native-web';
 
 export function LogIn() {
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState('0');
-  
-  const [password, setPassword] = useState('1');
+  const [user, setUser] = useState({
+    "email": "",
+    "password": ""
+  });
 
-   const validacion = async (e) => {
+  const handleChange = (event) => {
+    const value = event?.target?.value;
+    const name = event?.target?.name
+    setUser({
+      ...user,
+      [name]: value,
+    });
+  };
+
+  const validacion = async (event) => {
     console.log('validar')
-    if (!useState('0') || !useState('1')) {
+    console.log(user)
+    if (!useState() || !useState()) {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-      await axiosLogIn(user).then(()=> {
+      await axiosLogIn(user).then(() => {
         navigation.navigate('Home')
       })
-      .catch(() => {
-        Alert.alert("Su clave no esta autorizada")
-      });
+        .catch(() => {
+          Alert.alert("Su clave no esta autorizada")
+        });
     }
-   }
+  }
 
   return (
     <View style={styles.container}>
-      <TextInput
-        value={email}
-        placeholder={'Email'}
-        style={styles.input}
-        onChangeText={newEmail => setEmail(newEmail)}
-        defaultValue={email}
-        onBlur={validacion(value)}
-      />
-      <Text>{this.state.field_empty}</Text>
-      <TextInput
-        value={password}
-        placeholder={'Password'}
-        secureTextEntry={true}
-        style={styles.input}
-        onChangeText={newPassword => setPassword(newPassword)}
-        defaultValue={password}
-        onBlur={validacion(value)}
-      />
-      <Text>{this.state.field_empty}</Text>
-      <Alert></Alert>
-      <Button
-        title={'Login'}
-        style={styles.input}
-        onPress={validacion}
-      />
+      <Form>
+        <Text>Usuario</Text>
+        <TextInput
+          type="text"
+          value={user.email}
+          placeholder={'Email'}
+          style={styles.input}
+          name="Email"
+          onChange={handleChange}
+          onBlur={validacion}
+          required
+        />
+        <Text>Contraseña</Text>
+        <TextInput
+          type="password"
+          value={user.password}
+          placeholder={'Password'}
+          secureTextEntry={true}
+          name="Password"
+          style={styles.input}
+          onChange={handleChange}
+          onBlur={validacion}
+        />
+
+        <Button
+          title={'Login'}
+          style={styles.input}
+          onPress={validacion}
+        />
+      </Form>
     </View>
   );
 }
