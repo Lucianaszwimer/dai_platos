@@ -1,20 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 
+
 const axiosClient = axios.create({
-  baseURL: "https://api.spoonacular.com"
+  baseURL: "http://challenge-react.alkemy.org/"
 })
 
-export const axiosLogIn = () => {
-  return axiosClient.get('/recipes/complexSearch').then(response => {
-    if (response.status < 300) {
+export const axiosLogIn = async (user) => {
+  return axiosClient.post('', {...user}).then(response => {
       return response.data
-    }
-    else {
-      console.log("Status > 300")
-    }
+    
   })
     .catch(function (exc) {
+      throw error;
       console.log("Axios error: ", exc)
     })
 }

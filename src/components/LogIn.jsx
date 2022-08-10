@@ -1,35 +1,30 @@
-import { StyleSheet, View, Alert, Text } from 'react-native';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
+import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
-import { TextInput } from 'react-native-web';
+import React, { useState} from 'react';
+import LoadingSpin from "react-loading-spin";
+import { axiosLogIn } from '../axios/axios';
 
 export function LogIn() {
   const navigation = useNavigation();
 
   const [user, setUser] = useState({
-    "email": "",
-    "password": ""
+    email: "",
+    password: ""
   });
 
-  const handleChange = (event) => {
-    const value = event?.target?.value;
-    const name = event?.target?.name
-    setUser({
-      ...user,
-      [name]: value,
-    });
-  };
-
   const validacion = async (event) => {
-    console.log('validar')
-    console.log(user)
-    if (!useState() || !useState()) {
+    event.preventDefault()
+    //console.log('validar')
+    //console.log(user)
+    if (!user.email || !user.password) {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-      await axiosLogIn(user).then(() => {
+      await axiosLogIn(user)
+      .then(() => {
+        console.log("juli entre al then");
+        <LoadingSpin>
+        </LoadingSpin>
         navigation.navigate('Home')
       })
         .catch(() => {
@@ -40,28 +35,32 @@ export function LogIn() {
 
   return (
     <View style={styles.container}>
-      <Form>
+    
         <Text>Usuario</Text>
         <TextInput
           type="text"
           value={user.email}
           placeholder={'Email'}
           style={styles.input}
-          name="Email"
-          onChange={handleChange}
-          onBlur={validacion}
-          required
+          name="email"
+          onChangeText={(text) => setUser({
+            ...user,
+            email: text,
+          })} 
         />
+
         <Text>Contraseña</Text>
         <TextInput
           type="password"
           value={user.password}
           placeholder={'Password'}
           secureTextEntry={true}
-          name="Password"
+          name="password"
           style={styles.input}
-          onChange={handleChange}
-          onBlur={validacion}
+          onChangeText={(text) => setUser({
+            ...user,
+            password: text,
+          })} 
         />
 
         <Button
@@ -69,7 +68,7 @@ export function LogIn() {
           style={styles.input}
           onPress={validacion}
         />
-      </Form>
+  
     </View>
   );
 }
