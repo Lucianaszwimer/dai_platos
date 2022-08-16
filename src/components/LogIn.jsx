@@ -3,9 +3,13 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState} from 'react';
 import LoadingSpin from "react-loading-spin";
 import { axiosLogIn } from '../axios/axios';
+import { useContextState } from '../../App';
+import { ActionTypes } from '../../contextState';
 
 export function LogIn() {
   const navigation = useNavigation();
+  const {contextState, setContextState} = useContextState();
+  
 
   const [user, setUser] = useState({
     email: "",
@@ -14,15 +18,13 @@ export function LogIn() {
 
   const validacion = async (event) => {
     event.preventDefault()
-    //console.log('validar')
-    //console.log(user)
     if (!user.email || !user.password) {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-      await axiosLogIn(user)
+      let token = await axiosLogIn(user)
       .then(() => {
-        console.log("juli entre al then");
+        console.log(token);
         <LoadingSpin>
         </LoadingSpin>
         navigation.navigate('Home')
@@ -31,6 +33,17 @@ export function LogIn() {
           Alert.alert("Su clave no esta autorizada")
         });
     }
+    setContextState({
+      type:ActionTypes.SetEmail,
+      value:{
+        email:user.email
+      }
+    },{
+      type:ActionTypes.SetPassword,
+      value:{
+        password:user.password
+      }
+    })
   }
 
   return (
