@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 
 export const initialState = {
     loading: true,
@@ -74,4 +75,4 @@ export function ContextProvider({ children, initial = initialState }) {
 
 }
 
-export const useContextState = () => useContex(Cont);
+export const useContextState = () => useContext(Cont);

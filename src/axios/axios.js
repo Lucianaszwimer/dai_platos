@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import axios from 'axios';
 
 const axiosClient = axios.create({
@@ -7,27 +6,26 @@ const axiosClient = axios.create({
 
 export const axiosLogIn = async (user) => {
   return axiosClient.post('', { ...user }).then(response => {
-    console.log(response.data)
+    console.log("adentro axios:", response.data)
     return response.data
   })
     .catch(function (exc) {
       throw error;
-      console.log("Axios error: ", exc)
     })
 }
 
-/*const axiosChef = axios.create({
-  baseURL: " https://api.spoonacular.com/recipes/complexSearch"
+const axiosChef = axios.create({
+  baseURL: " https://api.spoonacular.com/recipes/716429/information?apiKey=",
+  ApiKey : process.env.apiKey,
 })
 
-export const axiosRecetas = async (user) => {
-  return axiosChef.get('', { ...x }).then(response => {
+export const axiosRecetas = async () => {
+  return axiosChef.get('', {ApiKey}).then(response => {
     return response.data
   })
     .catch(function (exc) {
       throw error;
-      console.log("Axios error: ", exc)
     })
-}*/
+}
 
 

@@ -1,87 +1,68 @@
 import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState} from 'react';
-import LoadingSpin from "react-loading-spin";
+import React from 'react';
 import { axiosLogIn } from '../axios/axios';
-import { useContextState } from '../../App';
+import { useContextState } from '../../contextState.js';
 import { ActionTypes } from '../../contextState';
 
 export function LogIn() {
   const navigation = useNavigation();
-  const {contextState, setContextState} = useContextState();
-  
 
-  const [user, setUser] = useState({
-    email: "",
-    password: ""
-  });
+  const { contextState, setContextState } = useContextState();
 
   const validacion = async (event) => {
     event.preventDefault()
-    if (!user.email || !user.password) {
+    if (!contextState.user.email || !contextState.user.password) {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-      let token = await axiosLogIn(user)
-      .then(() => {
-        console.log(token);
-        <LoadingSpin>
-        </LoadingSpin>
-        navigation.navigate('Home')
-      })
+       await axiosLogIn(contextState.user)
+        .then(() => {
+          navigation.navigate('Home')
+        })
         .catch(() => {
           Alert.alert("Su clave no esta autorizada")
         });
+      
     }
-    setContextState({
-      type:ActionTypes.SetEmail,
-      value:{
-        email:user.email
-      }
-    },{
-      type:ActionTypes.SetPassword,
-      value:{
-        password:user.password
-      }
-    })
   }
 
   return (
     <View style={styles.container}>
-    
-        <Text>Usuario</Text>
-        <TextInput
-          type="text"
-          value={user.email}
-          placeholder={'Email'}
-          style={styles.input}
-          name="email"
-          onChangeText={(text) => setUser({
-            ...user,
-            email: text,
-          })} 
-        />
 
-        <Text>Contraseña</Text>
-        <TextInput
-          type="password"
-          value={user.password}
-          placeholder={'Password'}
-          secureTextEntry={true}
-          name="password"
-          style={styles.input}
-          onChangeText={(text) => setUser({
-            ...user,
-            password: text,
-          })} 
-        />
+      <Text>Usuario</Text>
+      <TextInput
+        type="text"
+        placeholder={'Email'}
+        style={styles.input}
+        name="email"
+        onChangeText={(text) => setContextState({
+          type: ActionTypes.SetEmail,
+          value: text
+        })
+        }
+      />
 
-        <Button
-          title={'Login'}
-          style={styles.input}
-          onPress={validacion}
-        />
-  
+      <Text>Contraseña</Text>
+      <TextInput
+        type="password"
+        placeholder={'Password'}
+        secureTextEntry={true}
+        name="password"
+        style={styles.input}
+        onChangeText={(text) => setContextState({
+          type: ActionTypes.SetPassword,
+          value: text
+        })
+        }
+      />
+
+      <Button
+        title={'Login'}
+        style={styles.input}
+        onPress={validacion}
+      />
+
     </View>
   );
 }
