@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Alert, FlatList } from 'react-native';
 import { axiosRecetas } from '../axios/axios';
 
 
-export function Nombre() {
+export function Home() {
+  let platos;
 const axiosPlatos = async () => {
-    let platos = await axiosRecetas().then(() => {
+    platos = await axiosRecetas()
+    .then(() => {
       console.log("platos:", platos)
     })
     .catch(() => {
@@ -19,7 +21,7 @@ const axiosPlatos = async () => {
     <View style={styles.container}>
       <FlatList
         data={[
-          { key: 'Luli' }
+          { key: platos }
         ]}
         renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>}
       />

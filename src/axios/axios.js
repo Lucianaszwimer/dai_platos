@@ -1,7 +1,11 @@
 import axios from 'axios';
+import 'dotenv/config';
+
+const  ApiKey = process.env.API_KEY;
 
 const axiosClient = axios.create({
-  baseURL: "http://challenge-react.alkemy.org/"
+  baseURL: "http://challenge-react.alkemy.org/",
+ 
 })
 
 export const axiosLogIn = async (user) => {
@@ -14,18 +18,17 @@ export const axiosLogIn = async (user) => {
     })
 }
 
-const axiosChef = axios.create({
-  baseURL: " https://api.spoonacular.com/recipes/716429/information?apiKey=",
-  ApiKey : process.env.apiKey,
-})
-
 export const axiosRecetas = async () => {
-  return axiosChef.get('', {ApiKey}).then(response => {
+  //no anda si usamos la apikey en el env
+  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${ApiKey}`)
+  .then(response => {
+    console.log("entro al then")
+    console.log(response.data)
     return response.data
   })
     .catch(function (exc) {
+      console.log("entro al catch")
       throw error;
     })
 }
-
 
