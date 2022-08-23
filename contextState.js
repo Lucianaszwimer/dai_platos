@@ -8,6 +8,13 @@ export const initialState = {
         password: "",
         token: "",
     },
+    plato: {
+        id: "",
+        image: "",
+        imageType: "",
+        title: "",
+    },
+    menu: []
 };
 
 export const ActionTypes = {
@@ -16,6 +23,12 @@ export const ActionTypes = {
     SetEmail: "SET_EMAIL",
     SetPassword: "SET_PASSWORD",
     SetToken: "SET_TOKEN",
+    SetPlato: "SET_PLATO",
+    SetId: "SET_ID",
+    SetImage: "SET_IMAGE",
+    SetImageType: "SET_IMAGE_TYPE",
+    SetTitle: "SET_TITLE",
+    AddPlato: "ADD_PLATO"
 };
 
 
@@ -55,6 +68,50 @@ export const reducer = (state = {}, action) => {
                     token: action.value,
                 }
             };
+        case ActionTypes.SetPlato:
+            return {
+                ...state,
+                plato: action.value,
+
+            };
+        case ActionTypes.SetId:
+            return {
+                ...state,
+                plato: {
+                    ...state.plato,
+                    id: action.value,
+                }
+            };
+        case ActionTypes.SetImage:
+            return {
+                ...state,
+                plato: {
+                    ...state.plato,
+                    image: action.value,
+                }
+            };
+        case ActionTypes.SetImageType:
+            return {
+                ...state,
+                plato: {
+                    ...state.plato,
+                    imageType: action.value,
+                }
+            };
+        case ActionTypes.SetTitle:
+            return {
+                ...state,
+                plato: {
+                    ...state.plato,
+                    title: action.value,
+                }
+            };
+        case ActionTypes.AddPlato:
+            return {
+                ...state,
+                menu: [...state.menu, action.value ]
+            }
+
     }
 }
 

@@ -10,20 +10,19 @@ export function LogIn() {
 
   const { contextState, setContextState } = useContextState();
 
-  const validacion = async (event) => {
+  const validacion = (event) => {
     event.preventDefault()
     if (!contextState.user.email || !contextState.user.password) {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-       await axiosLogIn(contextState.user)
+        axiosLogIn(contextState.user)
         .then(() => {
           navigation.navigate('Home')
         })
         .catch(() => {
           Alert.alert("Su clave no esta autorizada")
         });
-      
     }
   }
 
