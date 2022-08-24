@@ -20,9 +20,8 @@ export const axiosLogIn = (user) => {
 
 export const axiosRecetas = () => {
   //no anda si usamos la apikey en el env
-  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=32157d7cafa144d0a559859e61068be1`)
+  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=6dcc1e5214e249c8b177852962c17dd6`)
   .then(response => {
-    console.log("entro al then")
     console.log(response.data)
     return response.data
   })
@@ -32,3 +31,14 @@ export const axiosRecetas = () => {
     })
 }
 
+export const getPlatosByNombre = (busqueda) => {
+  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=6dcc1e5214e249c8b177852962c17dd6&query=${busqueda}`)
+  .then(response => {
+    console.log("entro bien al axios")
+    return response.data
+  })
+  .catch(function(exc){
+    console.log("entro al catch")
+    throw error;  
+  })
+}

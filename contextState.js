@@ -28,7 +28,7 @@ export const ActionTypes = {
     SetImage: "SET_IMAGE",
     SetImageType: "SET_IMAGE_TYPE",
     SetTitle: "SET_TITLE",
-    AddPlato: "ADD_PLATO"
+    AddPlato: "ADD_PLATO",
 };
 
 

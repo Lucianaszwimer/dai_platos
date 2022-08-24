@@ -9,7 +9,7 @@ export function Plato() {
 
     const { contextState, setContextState } = useContextState();
     const axiosPlatos = () => {
-      axiosRecetas()
+      getPlatosByNombre()
         .then((res) => {
           setContextState({
             type: ActionTypes.AddPlato,
