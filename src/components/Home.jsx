@@ -5,7 +5,6 @@ import { ActionTypes } from '../../contextState';
 import React, { useState, useEffect } from 'react';
 import { SearchBar } from 'react-native-elements';
 import { getPlatosByNombre } from '../axios/axios.js';
-
 import { Plato } from './Plato.jsx'
 
 export function Home() {
@@ -14,8 +13,7 @@ export function Home() {
   const [platosBuscadosState, setPlatosBuscadosState] = useState([]);
 
   const axiosPlatos = (busqueda) => {
-    let caracteresBusqueda = busqueda.length
-    if (caracteresBusqueda > 2) {
+    if (busqueda.length > 2) {
       getPlatosByNombre(busqueda)
         .then((res) => {
           setPlatosBuscadosState(res)
@@ -27,25 +25,33 @@ export function Home() {
         });
     }
   }
-  const renderItem = ({ item }) => (
-    <Plato data={item} isMenu={false} setMenu={props.setMenu} menu={props.menu} />
-  );
+  //<Plato data={item} isMenu={false} setMenu={props.setMenu} menu={props.menu} />
+
+  const renderItem = ({ item }) => {
+    console.log(item)
+    return <Text>{item.title}</Text>
+  };
 
   return (
     <View style={styles.container}>
       <SearchBar
         placeholder="Escriba aquí..."
         onChangeText={(busqueda) => {
-          setBusquedaState(busqueda);
-          axiosPlatos(busqueda)
+            setBusquedaState(busqueda);
+          if (busqueda.length > 2) {
+            axiosPlatos(busqueda)
+          } else {
+            setPlatosBuscadosState([]);
+          }
         }}
         value={busquedaState}
       />
-      <FlatList style={styles.item}
-        data={platosBuscadosState}
+      {platosBuscadosState?.results && <FlatList
+      //nos seguramos que exista platosBuscadosState y el "result" es el resultado del array de res
+        data={platosBuscadosState.results}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-      />
+      />}
     </View>
   );
 
