@@ -1,13 +1,12 @@
-import { StyleSheet, View, Text, Alert, FlatList } from 'react-native';
-import { axiosRecetas } from '../axios/axios';
-import { useContextState } from '../../contextState.js';
-import { ActionTypes } from '../../contextState';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Alert, FlatList, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import { SearchBar } from 'react-native-elements';
 import { getPlatosByNombre } from '../axios/axios.js';
-import { Plato } from './Plato.jsx'
 
 export function Home() {
+
+  const navigation = useNavigation();
 
   const [busquedaState, setBusquedaState] = useState("");
   const [platosBuscadosState, setPlatosBuscadosState] = useState([]);
@@ -25,19 +24,18 @@ export function Home() {
         });
     }
   }
-  //<Plato data={item} isMenu={false} setMenu={props.setMenu} menu={props.menu} />
 
-  const renderItem = ({ item }) => {
-    console.log(item)
-    return <Text>{item.title}</Text>
-  };
+  /* const renderItem = ({ item }) => {
+     console.log(item)
+     return <Text>{item.title}</Text>
+   };*/
 
   return (
     <View style={styles.container}>
       <SearchBar
         placeholder="Escriba aquí..."
         onChangeText={(busqueda) => {
-            setBusquedaState(busqueda);
+          setBusquedaState(busqueda);
           if (busqueda.length > 2) {
             axiosPlatos(busqueda)
           } else {
@@ -46,11 +44,19 @@ export function Home() {
         }}
         value={busquedaState}
       />
-      {platosBuscadosState?.results && <FlatList
-      //nos seguramos que exista platosBuscadosState y el "result" es el resultado del array de res
+      {platosBuscadosState?.results && //nos seguramos que exista platosBuscadosState y el "result" es el resultado del array de res 
+      <FlatList
         data={platosBuscadosState.results}
-        renderItem={renderItem}
         keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <>
+            <Text>{item.title}</Text>
+            <Button
+              title="Detalle"
+              onPress={(e) => navigation.navigate('Plato',{id:item.id})}
+            />
+          </>
+        )}
       />}
     </View>
   );

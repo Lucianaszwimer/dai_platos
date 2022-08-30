@@ -3,35 +3,28 @@ import { axiosRecetas } from '../axios/axios';
 import { useContextState } from '../../contextState.js';
 import { ActionTypes } from '../../contextState';
 import {useState, useEffect} from 'react';
+import { getPlatosById } from '../axios/axios.js';
 
 
-export function Plato() {
+export function Plato(props) {
 
     const { contextState, setContextState } = useContextState();
     const axiosPlatos = () => {
-      getPlatosByNombre()
+      getPlatosById(props)
         .then((res) => {
-          setContextState({
-            type: ActionTypes.AddPlato,
-            value: res
-          })
-          console.log(contextState.menu)
+          console.log(res)
         })
         .catch(() => {
           Alert.alert("Fallo la busqueda de platos")
         });
     }
-  
-  
-  
+    useEffect(() => {
+      axiosPlatos(props);
+    });
+
     return (
       <View style={styles.container}>
-        <FlatList
-          data={
-          contextState.menu
-          }
-          renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>}
-        />
+        
       </View>
     );
   

@@ -42,3 +42,15 @@ export const getPlatosByNombre = (busqueda) => {
     throw error;  
   })
 }
+
+export const getPlatosById = (id) => {
+  return axiosClient.get(`https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false`)
+  .then(response => {
+    console.log("entro bien al axios")
+    return response.data
+  })
+  .catch(function(exc){
+    console.log("entro al catch")
+    throw error;  
+  })
+}
