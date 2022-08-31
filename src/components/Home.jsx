@@ -53,7 +53,7 @@ export function Home() {
             <Text>{item.title}</Text>
             <Button
               title="Detalle"
-              onPress={(e) => navigation.navigate('Plato',{id:item.id})}
+              onPress={() => navigation.navigate('Plato', {itemId:item.id})}
             />
           </>
         )}

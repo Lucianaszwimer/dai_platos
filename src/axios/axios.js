@@ -44,9 +44,10 @@ export const getPlatosByNombre = (busqueda) => {
 }
 
 export const getPlatosById = (id) => {
-  return axiosClient.get(`https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false`)
+  //console.log(id)
+  return axiosClient.get(`https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&apiKey=6dcc1e5214e249c8b177852962c17dd6`)
   .then(response => {
-    console.log("entro bien al axios")
+    console.log("detalle axios bien")
     return response.data
   })
   .catch(function(exc){

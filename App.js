@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LogIn } from './src/components/LogIn.jsx'
 import { Home } from './src/components/Home.jsx'
 import { Plato } from './src/components/Plato.jsx'
+import { Menu } from './src/components/Menu.jsx'
 import { ContextProvider } from './contextState.js';
 
 const Stack = createNativeStackNavigator();
@@ -21,9 +22,15 @@ function HomeScreen() {
   );
 }
 
-function PlatoScreen() {
+function PlatoScreen(props) {
   return (
-    <Plato />
+    <Plato {...props}/>
+  );
+}
+
+function MenuScreen() {
+  return (
+    <Menu />
   );
 }
 
@@ -35,7 +42,7 @@ export default function App() {
           {/* <Stack.Screen name="LogIn" component={LogInScreen} /> */}
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Plato" component={PlatoScreen} />
-
+          <Stack.Screen name="Menu" component={MenuScreen} />
         </Stack.Navigator>
       </ContextProvider>
     </NavigationContainer>
