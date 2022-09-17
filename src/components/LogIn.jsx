@@ -1,31 +1,34 @@
 import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { axiosLogIn } from '../axios/axios';
-import { useContextState } from '../../contextState.js';
-import { ActionTypes } from '../../contextState';
+import { useContextState, ActionTypes } from '../../contextState.js';
+
 
 export function LogIn() {
-  const navigation = useNavigation();
-
   const { contextState, setContextState } = useContextState();
-
-  const validacion = (event) => {
-    event.preventDefault()
-    if (!contextState.user.email || !contextState.user.password) {
+  const [botonAbilitado, setBotonAbilitado] = useState(false);
+  const validacion = async (event) => {
+    event?.preventDefault()
+    setBotonAbilitado(true)
+    if (!contextState?.user?.email || !contextState?.user?.password) {
+      setBotonAbilitado(false)
       Alert.alert("No se han ingresado los valores")
     }
     else {
-        axiosLogIn(contextState.user)
-        .then(() => {
-          navigation.navigate('Home')
+        await axiosLogIn(contextState.user)
+        .then((res) => {
+          setContextState({
+            type: ActionTypes.SetToken,
+            value: res.token
+          })
         })
         .catch(() => {
+          setBotonAbilitado(false)
           Alert.alert("Su clave no esta autorizada")
         });
     }
   }
-
+  
   return (
     <View style={styles.container}>
 
@@ -59,7 +62,10 @@ export function LogIn() {
       <Button
         title={'Login'}
         style={styles.input}
-        onPress={validacion}
+        disabled={botonAbilitado}
+        onPress={()=>{
+          validacion()
+        }}
       />
 
     </View>

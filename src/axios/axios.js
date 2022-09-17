@@ -1,57 +1,51 @@
 import axios from 'axios';
-import 'dotenv/config';
 
-//const  ApiKey = process.env.API_KEY;
 
-const axiosClient = axios.create({
+const ApiKey = "6dcc1e5214e249c8b177852962c17dd6";
+
+const axiosClientLogin = axios.create({
   baseURL: "http://challenge-react.alkemy.org/",
- 
+
 })
 
-export const axiosLogIn = (user) => {
-  return axiosClient.post('', { ...user }).then(response => {
-    console.log("adentro axios:", response.data)
-    return response.data
-  })
-    .catch(function (exc) {
-      throw error;
-    })
+const axiosClientApi = axios.create({
+  baseURL: "https://api.spoonacular.com/recipes/",
+  
+})
+
+export const axiosLogIn = async (user) => {
+  try {
+    const response = await axiosClientLogin.post('', { ...user });
+    return response.data;
+  } catch (exc) {
+    throw error;
+  }
 }
 
-export const axiosRecetas = () => {
+export const axiosRecetas = async () => {
   //no anda si usamos la apikey en el env
-  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=6dcc1e5214e249c8b177852962c17dd6`)
-  .then(response => {
-    console.log(response.data)
-    return response.data
-  })
-    .catch(function (exc) {
-      console.log("entro al catch")
-      throw error;
-    })
+  try {
+    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}`);
+    return response.data;
+  } catch (exc) {
+    throw error;
+  }
 }
 
-export const getPlatosByNombre = (busqueda) => {
-  return axiosClient.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=6dcc1e5214e249c8b177852962c17dd6&query=${busqueda}`)
-  .then(response => {
-    console.log("entro bien al axios")
-    return response.data
-  })
-  .catch(function(exc){
-    console.log("entro al catch")
-    throw error;  
-  })
+export const getPlatosByNombre = async (busqueda) => {
+  try {
+    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}&query=${busqueda}`);
+    return response.data;
+  } catch (exc) {
+    throw error;
+  }
 }
 
-export const getPlatosById = (id) => {
-  //console.log(id)
-  return axiosClient.get(`https://api.spoonacular.com/recipes/${id}/information?includeNutrition=false&apiKey=6dcc1e5214e249c8b177852962c17dd6`)
-  .then(response => {
-    console.log("detalle axios bien")
-    return response.data
-  })
-  .catch(function(exc){
-    console.log("entro al catch")
-    throw error;  
-  })
+export const getPlatosById = async (id) => {
+  try {
+    const response = await axiosClientApi.get(`/${id}/information?includeNutrition=false&apiKey=${ApiKey}`);
+    return response.data;
+  } catch (exc) {
+    throw error;
+  }
 }

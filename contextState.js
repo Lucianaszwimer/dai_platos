@@ -29,6 +29,8 @@ export const ActionTypes = {
     SetImageType: "SET_IMAGE_TYPE",
     SetTitle: "SET_TITLE",
     AddPlato: "ADD_PLATO",
+    DelPlato: "DELETE_PLATO",
+    
 };
 
 
@@ -109,9 +111,13 @@ export const reducer = (state = {}, action) => {
         case ActionTypes.AddPlato:
             return {
                 ...state,
-                menu: [...state.menu, action.value ]
-            }
-
+                menu: action.value
+            };
+        case ActionTypes.DelPlato:
+            return {
+                ...state,
+                menu: state.menu.filter((p) => p.id !== action.value)
+            };
     }
 }
 

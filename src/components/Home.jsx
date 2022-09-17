@@ -1,34 +1,28 @@
-import { StyleSheet, View, Text, Alert, FlatList, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, View, Alert, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import { SearchBar } from 'react-native-elements';
 import { getPlatosByNombre } from '../axios/axios.js';
+import Plato from './Plato.jsx';
 
 export function Home() {
-
-  const navigation = useNavigation();
-
   const [busquedaState, setBusquedaState] = useState("");
   const [platosBuscadosState, setPlatosBuscadosState] = useState([]);
 
-  const axiosPlatos = (busqueda) => {
-    if (busqueda.length > 2) {
-      getPlatosByNombre(busqueda)
-        .then((res) => {
-          setPlatosBuscadosState(res)
-          console.log(platosBuscadosState)
-        })
-        .catch((err) => {
-          Alert.alert("Fallo la busqueda de platos")
-          console.log(err)
-        });
-    }
+  const axiosPlatos = async (busqueda) => {
+    getPlatosByNombre(busqueda)
+      .then((res) => {
+        setPlatosBuscadosState(res)
+      })
+      .catch((err) => {
+        Alert.alert("Fallo la busqueda de platos")
+        console.log(err)
+      });
   }
 
-  /* const renderItem = ({ item }) => {
-     console.log(item)
-     return <Text>{item.title}</Text>
-   };*/
+  const renderItem = ({ item }) => (
+    <Plato platos={item} inMenu={false} />
+
+  );
 
   return (
     <View style={styles.container}>
@@ -44,20 +38,13 @@ export function Home() {
         }}
         value={busquedaState}
       />
-      {platosBuscadosState?.results && //nos seguramos que exista platosBuscadosState y el "result" es el resultado del array de res 
-      <FlatList
-        data={platosBuscadosState.results}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <>
-            <Text>{item.title}</Text>
-            <Button
-              title="Detalle"
-              onPress={() => navigation.navigate('Plato', {itemId:item.id})}
-            />
-          </>
-        )}
-      />}
+      
+        <FlatList
+          data={platosBuscadosState.results}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+        />
+
     </View>
   );
 
@@ -65,8 +52,8 @@ export function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 22
+    flex:1,
+    paddingTop: 22,
   },
   item: {
     padding: 10,
