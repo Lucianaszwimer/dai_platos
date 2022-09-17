@@ -3,7 +3,7 @@ import { getPlatosById } from '../axios/axios.js';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { useState } from 'react';
 
-export default function Plato({ platos, inMenu }) {
+export default function Plato({ plato, menu }) {
   const { contextState, setContextState } = useContextState();
   const [modalVisible, setModalVisible] = useState(false);
   let agregarVisible = false;
@@ -12,9 +12,9 @@ export default function Plato({ platos, inMenu }) {
   let notVegan = 0
   console.log("Platos")
   menuAux.forEach(e => { e.vegan ? vegan++ : notVegan++ })
-  if (vegan == 2 && platos.vegan) {
+  if (vegan == 2 && plato.vegan) {
     agregarVisible = true
-  } else if(notVegan == 2 && !platos.vegan){
+  } else if(notVegan == 2 && !plato.vegan){
     agregarVisible = true
   }
 
@@ -24,7 +24,7 @@ export default function Plato({ platos, inMenu }) {
         menuAux.push(res)
       })
       .catch(() => {
-        Alert.alert("Fallo la busqueda de platos")
+        Alert.alert("Fallo la busqueda de plato")
       });
   }
   const addPlato = () => {
@@ -45,15 +45,15 @@ export default function Plato({ platos, inMenu }) {
         <View style={styles.modal}>
           <Image
             style={{ width: '100%', height: '40%', borderRadius: 15, }}
-            source={{ uri: platos.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
+            source={{ uri: plato.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
           />
-          <Text style={styles.textChico}>Nombre: {platos.title} </Text>
-          <Text style={styles.textChico}>Precio: {platos.pricePerServing} </Text>
-          <Text style={styles.textChico}>Vegetariano: {platos.vegetarian ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Vegano: {platos.vegan ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Preparado en: {platos.readyInMinutes} minutos </Text>
-          <Text style={styles.textChico}>Gluten free: {platos.glutenFree ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Nv saludable: {platos.healthScore} </Text>
+          <Text style={styles.textChico}>Nombre: {plato.title} </Text>
+          <Text style={styles.textChico}>Precio: {plato.pricePerServing} </Text>
+          <Text style={styles.textChico}>Vegetariano: {plato.vegetarian ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Vegano: {plato.vegan ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Preparado en: {plato.readyInMinutes} minutos </Text>
+          <Text style={styles.textChico}>Gluten free: {plato.glutenFree ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Nv saludable: {plato.healthScore} </Text>
 
           <Pressable
             style={styles.press}
@@ -64,10 +64,10 @@ export default function Plato({ platos, inMenu }) {
         </View>
       </Modal>
 
-      {inMenu ?
+      {menu ?
         <>
           <View style={styles.resultados}>
-            <Text style={styles.textChico}>Nombre: {platos?.title} </Text>
+            <Text style={styles.textChico}>Nombre: {plato?.title} </Text>
             <Button
               style={styles.input}
               title="Detalle"
@@ -81,7 +81,7 @@ export default function Plato({ platos, inMenu }) {
               onPress={() => {
                 setContextState({
                   type: ActionTypes.DelPlato,
-                  value: platos.id
+                  value: plato.id
                 });
               }}
             />
@@ -90,12 +90,12 @@ export default function Plato({ platos, inMenu }) {
         :
         <>
           <View style={styles.resultados}>
-            <Text style={styles.textChico}>{platos?.title} </Text>
+            <Text style={styles.textChico}>{plato?.title} </Text>
             <Button
               style={styles.input}
               title="Agregar"
               onPress={ () => {
-                axiosPlatos(platos.id)
+                axiosPlatos(plato.id)
                 addPlato()
               }}
               disabled={agregarVisible}

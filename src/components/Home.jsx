@@ -19,11 +19,6 @@ export function Home() {
       });
   }
 
-  const renderItem = ({ item }) => (
-    <Plato platos={item} inMenu={false} />
-
-  );
-
   return (
     <View style={styles.container}>
       <SearchBar
@@ -42,7 +37,9 @@ export function Home() {
         <FlatList
           data={platosBuscadosState.results}
           keyExtractor={item => item.id}
-          renderItem={renderItem}
+          renderItem={()=>{
+            <Plato plato={item} menu={false}/>
+          }}
         />
 
     </View>
