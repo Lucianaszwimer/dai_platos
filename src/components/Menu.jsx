@@ -6,7 +6,7 @@ import Plato from './Plato.jsx';
 
 export function Menu() {
   const { contextState, setContextState } = useContextState();
-  
+
   let acumulativoPrecio = 0;
   let promedioSalud = 0;
   let vegan = 0;
@@ -18,6 +18,10 @@ export function Menu() {
   });
   console.log("En el menu", contextState.menu)
 
+  const renderItem = ({ item }) => (
+    <Plato plato={item} menu={true} />
+  );
+
   return (
     <View style={styles.container}>
       <Text>Menu</Text>
@@ -28,11 +32,9 @@ export function Menu() {
       <FlatList
         data={contextState?.menu}
         keyExtractor={item => item.id}
-        renderItem={()=>{
-          <Plato plato={item} menu={true} />
-        }}
+        renderItem={renderItem}
       />
-    
+
     </View>
   );
 }

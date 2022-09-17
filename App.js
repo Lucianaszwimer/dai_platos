@@ -8,7 +8,7 @@ import { ContextProvider, useContextState } from './contextState.js';
 
 export default function App() {
   const { contextState, setContextState } = useContextState();
-  
+
   return (
     <ContextProvider>
 
