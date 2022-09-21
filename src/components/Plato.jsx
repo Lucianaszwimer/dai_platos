@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, Alert, Image, Modal, Button, Pressable } from '
 import { getPlatosById } from '../axios/axios.js';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Plato({ plato, menu }) {
   const { contextState, setContextState } = useContextState();
@@ -10,7 +11,6 @@ export default function Plato({ plato, menu }) {
   let menuAux = contextState?.menu
   let vegan = 0
   let notVegan = 0
-  console.log("Platos")
   menuAux.forEach(e => { e.vegan ? vegan++ : notVegan++ })
   if (vegan == 2 && plato.vegan) {
     agregarVisible = true
@@ -34,7 +34,7 @@ export default function Plato({ plato, menu }) {
     });
   }
   return (
-    <>
+    <SafeAreaView>
       <Modal
         animationType="slide"
         transparent
@@ -103,7 +103,7 @@ export default function Plato({ plato, menu }) {
           </View>
         </>
       }
-    </>
+    </SafeAreaView>
   );
 
 }

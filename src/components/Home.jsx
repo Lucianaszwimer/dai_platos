@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { SearchBar } from 'react-native-elements';
 import { getPlatosByNombre } from '../axios/axios.js';
 import Plato from './Plato.jsx';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function Home() {
   const [busquedaState, setBusquedaState] = useState("");
@@ -24,33 +25,32 @@ export function Home() {
   );
 
   return (
-    <View style={styles.container}>
-      <SearchBar
-        placeholder="Escriba aquí..."
-        onChangeText={(busqueda) => {
-          setBusquedaState(busqueda);
-          if (busqueda.length > 2) {
-            axiosPlatos(busqueda)
-          } else {
-            setPlatosBuscadosState([]);
-          }
-        }}
-        value={busquedaState}
-      />
+    <SafeAreaView style={styles.container}>
+        <SearchBar
+          placeholder="Escriba aquí..."
+          onChangeText={(busqueda) => {
+            setBusquedaState(busqueda);
+            if (busqueda.length > 2) {
+              axiosPlatos(busqueda)
+            } else {
+              setPlatosBuscadosState([]);
+            }
+          }}
+          value={busquedaState}
+        />
         <FlatList
           data={platosBuscadosState.results}
           keyExtractor={item => item.id}
           renderItem={renderItem}
         />
-
-    </View>
+    </SafeAreaView>
   );
 
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     paddingTop: 22,
   },
   item: {

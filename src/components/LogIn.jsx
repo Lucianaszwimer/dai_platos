@@ -2,7 +2,7 @@ import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
 import React, { useState } from 'react';
 import { axiosLogIn } from '../axios/axios';
 import { useContextState, ActionTypes } from '../../contextState.js';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function LogIn() {
   const { contextState, setContextState } = useContextState();
@@ -15,8 +15,9 @@ export function LogIn() {
       Alert.alert("No se han ingresado los valores")
     }
     else {
-        await axiosLogIn(contextState.user)
+      await axiosLogIn(contextState.user)
         .then((res) => {
+          console.log(res)
           setContextState({
             type: ActionTypes.SetToken,
             value: res.token
@@ -28,10 +29,9 @@ export function LogIn() {
         });
     }
   }
-  
-  return (
-    <View style={styles.container}>
 
+  return (
+    <SafeAreaView style={styles.container}>
       <Text>Usuario</Text>
       <TextInput
         type="text"
@@ -63,12 +63,11 @@ export function LogIn() {
         title={'Login'}
         style={styles.input}
         disabled={botonAbilitado}
-        onPress={()=>{
+        onPress={() => {
           validacion()
         }}
       />
-
-    </View>
+    </SafeAreaView>
   );
 }
 

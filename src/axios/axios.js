@@ -25,7 +25,7 @@ export const axiosLogIn = async (user) => {
 export const axiosRecetas = async () => {
   //no anda si usamos la apikey en el env
   try {
-    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}`);
+    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}`, {mode:'cors'});
     return response.data;
   } catch (exc) {
     throw error;
@@ -34,7 +34,7 @@ export const axiosRecetas = async () => {
 
 export const getPlatosByNombre = async (busqueda) => {
   try {
-    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}&query=${busqueda}`);
+    const response = await axiosClientApi.get(`/complexSearch?apiKey=${ApiKey}&query=${busqueda}`, {mode:'cors'});
     return response.data;
   } catch (exc) {
     throw error;
@@ -43,7 +43,7 @@ export const getPlatosByNombre = async (busqueda) => {
 
 export const getPlatosById = async (id) => {
   try {
-    const response = await axiosClientApi.get(`/${id}/information?includeNutrition=false&apiKey=${ApiKey}`);
+    const response = await axiosClientApi.get(`/${id}/information?includeNutrition=false&apiKey=${ApiKey}`, {mode:'cors'});
     return response.data;
   } catch (exc) {
     throw error;

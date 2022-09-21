@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, FlatList } from 'react-native';
 import React from 'react';
 import { useContextState } from '../../contextState.js';
 import Plato from './Plato.jsx';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function Menu() {
   const { contextState, setContextState } = useContextState();
@@ -23,7 +23,7 @@ export function Menu() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>Menu</Text>
       <Text>Acumulativo precio: {acumulativoPrecio}</Text>
       <Text>Salud promedio: {contextState.menu.length >= 1 ? promedioSalud / contextState.menu.length : 0}</Text>
@@ -34,8 +34,7 @@ export function Menu() {
         keyExtractor={item => item.id}
         renderItem={renderItem}
       />
-
-    </View>
+    </SafeAreaView>
   );
 }
 
