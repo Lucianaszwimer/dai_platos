@@ -14,7 +14,7 @@ export default function App() {
     <SafeAreaProvider>
       <ContextProvider>
 
-        {contextState.user.token ?
+        {!contextState.user.token ?
           <>
             <LogIn />
           </>
