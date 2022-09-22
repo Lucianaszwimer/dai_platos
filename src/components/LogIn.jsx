@@ -4,7 +4,7 @@ import { axiosLogIn } from '../axios/axios';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export function LogIn() {
+export function LogIn({setAuth}) {
   const { contextState, setContextState } = useContextState();
   const [botonAbilitado, setBotonAbilitado] = useState(false);
   const validacion = async (event) => {
@@ -29,7 +29,7 @@ export function LogIn() {
         });
     }
   }
-
+  if(contextState.user.token){setAuth(true)}
   return (
     <SafeAreaView style={styles.container}>
       <Text>Usuario</Text>
