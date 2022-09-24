@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-const ApiKeyMIA = "6dcc1e5214e249c8b177852962c17dd6";
-const ApiKey = "2532bbe5775d49d8adb09fcabb7184fe"
+const ApiKey = "6dcc1e5214e249c8b177852962c17dd6";
+
 const axiosClientLogin = axios.create({
   baseURL: "http://challenge-react.alkemy.org/",
 
