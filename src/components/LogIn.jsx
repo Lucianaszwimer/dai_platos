@@ -1,12 +1,16 @@
-import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
+import { StyleSheet, Alert, Text, TextInput, Button } from 'react-native';
 import React, { useState } from 'react';
-import { axiosLogIn } from '../axios/axios';
+import { axiosLogIn } from '../services/axios';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
-export function LogIn({setAuth}) {
+export function LogIn() {
+  const navigation = useNavigation();
   const { contextState, setContextState } = useContextState();
   const [botonAbilitado, setBotonAbilitado] = useState(false);
+
+
   const validacion = async (event) => {
     event?.preventDefault()
     setBotonAbilitado(true)
@@ -17,7 +21,6 @@ export function LogIn({setAuth}) {
     else {
       await axiosLogIn(contextState.user)
         .then((res) => {
-          console.log(res)
           setContextState({
             type: ActionTypes.SetToken,
             value: res.token
@@ -29,7 +32,9 @@ export function LogIn({setAuth}) {
         });
     }
   }
-  if(contextState.user.token){setAuth(true)}
+  if (contextState.user.token) {
+    navigation.navigate("Home")
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Text>Usuario</Text>

@@ -1,10 +1,13 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import { StyleSheet, Text, FlatList } from 'react-native';
 import React from 'react';
 import { useContextState } from '../../contextState.js';
 import Plato from './Plato.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 export function Menu() {
+  const navigation = useNavigation();
   const { contextState, setContextState } = useContextState();
 
   let acumulativoPrecio = 0;
@@ -16,7 +19,6 @@ export function Menu() {
     promedioSalud += e.healthScore;
     e.vegan ? vegan++ : notVegan++;
   });
-  console.log("En el menu", contextState.menu)
 
   const renderItem = ({ item }) => (
     <Plato plato={item} menu={true} />
@@ -25,6 +27,13 @@ export function Menu() {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Menu</Text>
+      <Button
+        style={styles.input}
+        title="Ir para atras"
+        onPress={() => {
+          navigation.goBack();
+        }}
+      />
       <Text>Acumulativo precio: {acumulativoPrecio}</Text>
       <Text>Salud promedio: {contextState.menu.length >= 1 ? promedioSalud / contextState.menu.length : 0}</Text>
       <Text>Platos veganos: {vegan}</Text>
@@ -41,6 +50,16 @@ export function Menu() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22
+    paddingTop: 22,
+    alignItems: "center",
+    justifyContent: 'center',
+  },
+  input: {
+    width: 200,
+    height: 44,
+    padding: 10,
+    marginBottom: 10,
+    position: 'fixed',
+    left: 0
   },
 });

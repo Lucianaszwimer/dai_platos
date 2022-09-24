@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, Alert, Image, Modal, Button, Pressable } from 'react-native';
-import { getPlatosById } from '../axios/axios.js';
+import { StyleSheet, Text, Alert, Image, Modal, Button, Pressable } from 'react-native';
+import { getPlatosById } from '../services/axios.js';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,12 +11,15 @@ export default function Plato({ plato, menu }) {
   let menuAux = contextState?.menu
   let vegan = 0
   let notVegan = 0
-  menuAux.forEach(e => { e.vegan ? vegan++ : notVegan++ })
+  contextState?.menu.forEach(e => { e.vegan ? vegan++ : notVegan++ })
   if (vegan == 2 && plato.vegan) {
     agregarVisible = true
-  } else if(notVegan == 2 && !plato.vegan){
+  } else if (notVegan == 2 && !plato.vegan) {
     agregarVisible = true
-  }
+  } 
+  if(contextState?.menu.length == 4){
+    agregarVisible = true
+  } 
 
   const axiosPlatos = (itemId) => {
     getPlatosById(itemId)
@@ -42,7 +45,7 @@ export default function Plato({ plato, menu }) {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }} >
-        <View style={styles.modal}>
+        <SafeAreaView style={styles.modal}>
           <Image
             style={{ width: '100%', height: '40%', borderRadius: 15, }}
             source={{ uri: plato.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
@@ -61,12 +64,12 @@ export default function Plato({ plato, menu }) {
           >
             <Text style={styles.textPress}>Cerrar</Text>
           </Pressable>
-        </View>
+        </SafeAreaView>
       </Modal>
 
       {menu ?
         <>
-          <View style={styles.resultados}>
+          <SafeAreaView style={styles.resultados}>
             <Text style={styles.textChico}>Nombre: {plato?.title} </Text>
             <Button
               style={styles.input}
@@ -85,22 +88,22 @@ export default function Plato({ plato, menu }) {
                 });
               }}
             />
-          </View>
+          </SafeAreaView>
         </>
         :
         <>
-          <View style={styles.resultados}>
+          <SafeAreaView style={styles.resultados}>
             <Text style={styles.textChico}>{plato?.title} </Text>
             <Button
               style={styles.input}
               title="Agregar"
-              onPress={ () => {
+              onPress={() => {
                 axiosPlatos(plato.id)
                 addPlato()
               }}
               disabled={agregarVisible}
             />
-          </View>
+          </SafeAreaView>
         </>
       }
     </SafeAreaView>

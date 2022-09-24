@@ -1,11 +1,13 @@
-import { StyleSheet, View, Alert, FlatList } from 'react-native';
+import { StyleSheet, Alert, FlatList } from 'react-native';
 import React, { useState } from 'react';
-import { SearchBar } from 'react-native-elements';
-import { getPlatosByNombre } from '../axios/axios.js';
+import { Button, SearchBar } from 'react-native-elements';
+import { getPlatosByNombre } from '../services/axios.js';
 import Plato from './Plato.jsx';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 export function Home() {
+  const navigation = useNavigation();
   const [busquedaState, setBusquedaState] = useState("");
   const [platosBuscadosState, setPlatosBuscadosState] = useState([]);
 
@@ -26,23 +28,32 @@ export function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-        <SearchBar
-          placeholder="Escriba aquí..."
-          onChangeText={(busqueda) => {
-            setBusquedaState(busqueda);
-            if (busqueda.length > 2) {
-              axiosPlatos(busqueda)
-            } else {
-              setPlatosBuscadosState([]);
-            }
-          }}
-          value={busquedaState}
-        />
-        <FlatList
-          data={platosBuscadosState.results}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        />
+      <SearchBar
+        placeholder="Escriba aquí..."
+        onChangeText={(busqueda) => {
+          setBusquedaState(busqueda);
+          if (busqueda.length > 2) {
+            axiosPlatos(busqueda)
+          } else {
+            setPlatosBuscadosState([]);
+          }
+        }}
+        value={busquedaState}
+      />
+
+      <Button
+        style={styles.input}
+        title="Menu"
+        onPress={() => {
+          navigation.navigate("Menu")
+        }}
+      />
+
+      <FlatList
+        data={platosBuscadosState.results}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
     </SafeAreaView>
   );
 
@@ -51,11 +62,16 @@ export function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
   },
   item: {
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  input: {
+    width: 200,
+    height: 44,
+    padding: 10,
+    marginBottom: 10,
   },
 });
