@@ -44,7 +44,7 @@ export function Home() {
       <Button
         style={styles.input}
         title="Menu"
-        onPress={() => {
+        onPress={ () => {
           navigation.navigate("Menu")
         }}
       />

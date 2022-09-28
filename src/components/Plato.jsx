@@ -7,22 +7,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Plato({ plato, menu }) {
   const { contextState, setContextState } = useContextState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [platoModal, setPlatoModal] = useState();
   let agregarVisible = false;
   let menuAux = contextState?.menu
   let vegan = 0
   let notVegan = 0
-  contextState?.menu.forEach(e => { e.vegan ? vegan++ : notVegan++ })
+  
+  contextState?.menu.forEach(e => { e?.vegan ? vegan++ : notVegan++ })
   if (vegan == 2 && plato.vegan) {
     agregarVisible = true
   } else if (notVegan == 2 && !plato.vegan) {
     agregarVisible = true
-  } 
-  if(contextState?.menu.length == 4){
+  }
+  if (contextState?.menu.length == 4) {
     agregarVisible = true
-  } 
+  }
 
-  const axiosPlatos = (itemId) => {
-    getPlatosById(itemId)
+  const axiosPlatosModal = async (itemId) => {
+    await getPlatosById(itemId)
+      .then((res) => {
+        setPlatoModal(res)
+      })
+      .catch(() => {
+        Alert.alert("Fallo la busqueda de plato")
+      });
+  }
+
+  const axiosPlatos = async (itemId) => {
+    await getPlatosById(itemId)
       .then((res) => {
         menuAux.push(res)
       })
@@ -30,12 +42,14 @@ export default function Plato({ plato, menu }) {
         Alert.alert("Fallo la busqueda de plato")
       });
   }
+
   const addPlato = () => {
     setContextState({
       type: ActionTypes.AddPlato,
       value: menuAux
     });
   }
+  console.log( platoModal?.image)
   return (
     <SafeAreaView>
       <Modal
@@ -47,16 +61,16 @@ export default function Plato({ plato, menu }) {
         }} >
         <SafeAreaView style={styles.modal}>
           <Image
-            style={{ width: '100%', height: '40%', borderRadius: 15, }}
-            source={{ uri: plato.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
+            style={ styles.image}
+            source={{ uri: platoModal?.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
           />
-          <Text style={styles.textChico}>Nombre: {plato.title} </Text>
-          <Text style={styles.textChico}>Precio: {plato.pricePerServing} </Text>
-          <Text style={styles.textChico}>Vegetariano: {plato.vegetarian ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Vegano: {plato.vegan ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Preparado en: {plato.readyInMinutes} minutos </Text>
-          <Text style={styles.textChico}>Gluten free: {plato.glutenFree ? 'si' : 'no'} </Text>
-          <Text style={styles.textChico}>Nv saludable: {plato.healthScore} </Text>
+          <Text style={styles.textChico}>Nombre: {platoModal?.title} </Text>
+          <Text style={styles.textChico}>Precio: {platoModal?.pricePerServing} </Text>
+          <Text style={styles.textChico}>Vegetariano: {platoModal?.vegetarian ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Vegano: {platoModal?.vegan ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Preparado en: {platoModal?.readyInMinutes} minutos </Text>
+          <Text style={styles.textChico}>Gluten free: {platoModal?.glutenFree ? 'si' : 'no'} </Text>
+          <Text style={styles.textChico}>Nv saludable: {platoModal?.healthScore} </Text>
 
           <Pressable
             style={styles.press}
@@ -75,6 +89,7 @@ export default function Plato({ plato, menu }) {
               style={styles.input}
               title="Detalle"
               onPress={() => {
+                setPlatoModal(plato)
                 setModalVisible(true);
               }}
             />
@@ -103,6 +118,14 @@ export default function Plato({ plato, menu }) {
               }}
               disabled={agregarVisible}
             />
+            <Button
+              style={styles.input}
+              title="Detalle"
+              onPress={async () => {
+                axiosPlatosModal(plato.id)
+                setModalVisible(true);
+              }}
+            />
           </SafeAreaView>
         </>
       }
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
   input: {
     width: 10,
     height: 44,
-
+    paddingTop:22,
   },
   resultados: {
     paddingTop: 22,
@@ -139,9 +162,8 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     margin: 20,
-    marginTop: 90,
-    width: '80%',
-    height: '70%',
+    width: '90%',
+    height: '90%',
     backgroundColor: "white",
     borderRadius: 15,
     padding: 35,
@@ -159,4 +181,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
+  image: {
+    width: '60%', 
+    height: '40%', 
+    borderRadius: 15,
+  }
 });
