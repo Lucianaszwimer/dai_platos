@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 const ApiKey = "6dcc1e5214e249c8b177852962c17dd6";
 
 const axiosClientLogin = axios.create({

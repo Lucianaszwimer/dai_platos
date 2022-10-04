@@ -3,6 +3,7 @@ import { getPlatosById } from '../services/axios.js';
 import { useContextState, ActionTypes } from '../../contextState.js';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
 
 export default function Plato({ plato, menu }) {
   const { contextState, setContextState } = useContextState();
@@ -12,25 +13,27 @@ export default function Plato({ plato, menu }) {
   let menuAux = contextState?.menu
   let vegan = 0
   let notVegan = 0
-  
-  contextState?.menu.forEach(e => { e?.vegan ? vegan++ : notVegan++ })
-  if (vegan == 2 && plato.vegan) {
-    agregarVisible = true
-  } else if (notVegan == 2 && !plato.vegan) {
-    agregarVisible = true
-  }
-  if (contextState?.menu.length == 4) {
-    agregarVisible = true
-  }
 
-  const axiosPlatosModal = async (itemId) => {
-    await getPlatosById(itemId)
+  useEffect(async () => {
+    await getPlatosById(plato.id)
       .then((res) => {
         setPlatoModal(res)
       })
       .catch(() => {
         Alert.alert("Fallo la busqueda de plato")
       });
+  }, [])
+
+  const disponibilidad = () => {
+    contextState?.menu.forEach(e => { e?.vegan ? vegan++ : notVegan++ })
+    if (vegan == 2 && platoModal.vegan) {  
+      agregarVisible = true
+    } else if (notVegan == 2 && !platoModal.vegan) {
+      agregarVisible = true
+    }
+    if (contextState?.menu.length == 4) {
+      agregarVisible = true
+    }
   }
 
   const axiosPlatos = async (itemId) => {
@@ -49,7 +52,7 @@ export default function Plato({ plato, menu }) {
       value: menuAux
     });
   }
-  console.log( platoModal?.image)
+
   return (
     <SafeAreaView>
       <Modal
@@ -61,7 +64,7 @@ export default function Plato({ plato, menu }) {
         }} >
         <SafeAreaView style={styles.modal}>
           <Image
-            style={ styles.image}
+            style={styles.image}
             source={{ uri: platoModal?.image ?? 'https://dclgroup.com.ar/wp-content/themes/unbound/images/No-Image-Found-400x264.png' }}
           />
           <Text style={styles.textChico}>Nombre: {platoModal?.title} </Text>
@@ -84,7 +87,7 @@ export default function Plato({ plato, menu }) {
       {menu ?
         <>
           <SafeAreaView style={styles.resultados}>
-            <Text style={styles.textChico}>Nombre: {plato?.title} </Text>
+            <Text style={styles.textChico}>{plato?.title} </Text>
             <Button
               style={styles.input}
               title="Detalle"
@@ -112,17 +115,19 @@ export default function Plato({ plato, menu }) {
             <Button
               style={styles.input}
               title="Agregar"
-              onPress={() => {
-                axiosPlatos(plato.id)
-                addPlato()
-              }}
               disabled={agregarVisible}
+              onPress={() => {
+                disponibilidad()
+                if (!agregarVisible) {
+                  axiosPlatos(plato.id)
+                  addPlato()
+                }
+              }}
             />
             <Button
               style={styles.input}
               title="Detalle"
               onPress={async () => {
-                axiosPlatosModal(plato.id)
                 setModalVisible(true);
               }}
             />
@@ -152,7 +157,7 @@ const styles = StyleSheet.create({
   input: {
     width: 10,
     height: 44,
-    paddingTop:22,
+    paddingTop: 22,
   },
   resultados: {
     paddingTop: 22,
@@ -182,8 +187,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   image: {
-    width: '60%', 
-    height: '40%', 
+    width: '60%',
+    height: '40%',
     borderRadius: 15,
   }
 });

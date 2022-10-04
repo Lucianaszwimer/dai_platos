@@ -32,7 +32,7 @@ export default function App() {
     <NavigationContainer>
       <ContextProvider>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/*<Stack.Screen name="LogIn" component={LogInScreen} />*/}
+          <Stack.Screen name="LogIn" component={LogInScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Menu" component={MenuScreen} />
         </Stack.Navigator>
